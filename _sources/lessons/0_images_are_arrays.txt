@@ -1,5 +1,3 @@
-[📂 Download lesson notebook](./0_images_are_arrays.ipynb)
-
 
 
 

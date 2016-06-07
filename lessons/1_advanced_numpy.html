@@ -1,0 +1,689 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Advanced NumPy &mdash; Learn scikit-image 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/sphinx_rtd_customize.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Learn scikit-image 0.1 documentation" href="../index.html"/>
+        <link rel="up" title="ImageXD 2016" href="../imagexd.html"/>
+        <link rel="next" title="Images are numpy arrays" href="0_images_are_arrays.html"/>
+        <link rel="prev" title="Preparation" href="0_preparation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Learn scikit-image
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../imagexd.html">ImageXD 2016</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imagexd.html#welcome-to-bids">Welcome to BIDS!</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../imagexd.html#schedule">Schedule</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="0_introduction.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0_preparation.html">Preparation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Advanced NumPy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#quick-example-gene-expression-without-numpy">Quick example: gene expression, without numpy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#even-quicker-what-is-gene-expression">Even quicker: what is gene expression?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#some-fake-data">Some fake data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#now-with-numpy">Now with NumPy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inside-a-numpy-ndarray">Inside a numpy ndarray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#advanced-operations-axis-wise-evaluation">Advanced operations: axis-wise evaluation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#advanced-operations-broadcasting">Advanced operations: broadcasting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fancy-indexing">Fancy indexing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="0_images_are_arrays.html">Images are numpy arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_ransac.html">RANSAC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Learn scikit-image</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../imagexd.html">ImageXD 2016</a> &raquo;</li>
+      
+    <li>Advanced NumPy</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/lessons/1_advanced_numpy.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="advanced-numpy">
+<span id="advanced-numpy"></span><h1>Advanced NumPy<a class="headerlink" href="#advanced-numpy" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="section" id="quick-example-gene-expression-without-numpy">
+<span id="quick-example-gene-expression-without-numpy"></span><h2>Quick example: gene expression, without numpy<a class="headerlink" href="#quick-example-gene-expression-without-numpy" title="Permalink to this headline">¶</a></h2>
+<p>FIRST...</p>
+</div>
+<div class="section" id="even-quicker-what-is-gene-expression">
+<span id="even-quicker-what-is-gene-expression"></span><h2>Even quicker: what is gene expression?<a class="headerlink" href="#even-quicker-what-is-gene-expression" title="Permalink to this headline">¶</a></h2>
+<p>How genes work:</p>
+<p><img alt="central dogma" src="../_images/centraldogma.png" /></p>
+<p>What this means:</p>
+<p><img alt="gene expression" src="../_images/gene-expression.png" /></p>
+<p>How we measure it:</p>
+<p><img alt="rna sequence" src="../_images/rnaseq.png" /></p>
+</div>
+<div class="section" id="some-fake-data">
+<span id="some-fake-data"></span><h2>Some fake data<a class="headerlink" href="#some-fake-data" title="Permalink to this headline">¶</a></h2>
+<p>|        | Cell type A | Cell type B | Cell type C | Cell type D |
+|&#8212;&#8212;&#8211;|&#8212;&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;&#8212;-|
+| Gene 0 | 100         | 200         | 50          | 400         |
+| Gene 1 | 50          | 0           | 0           | 100         |
+| Gene 2 | 350         | 100         | 50          | 200         |</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gene0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">400</span><span class="p">]</span>
+<span class="n">gene1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">gene2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">350</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="n">expression_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">gene0</span><span class="p">,</span> <span class="n">gene1</span><span class="p">,</span> <span class="n">gene2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Why is this a bad idea?</p>
+</div>
+<div class="section" id="now-with-numpy">
+<span id="now-with-numpy"></span><h2>Now with NumPy<a class="headerlink" href="#now-with-numpy" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expression_data</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[[100 200  50 400]
+ [ 50   0   0 100]
+ [350 100  50 200]]
+</pre></div>
+</div>
+<p>We are going to:</p>
+<ul class="simple">
+<li>Obtain an <em>RPKM</em> expression matrix</li>
+<li>Quantile normalize the data</li>
+</ul>
+<p>using the awesome power of NumPy</p>
+</div>
+<div class="section" id="inside-a-numpy-ndarray">
+<span id="inside-a-numpy-ndarray"></span><h2>Inside a numpy ndarray<a class="headerlink" href="#inside-a-numpy-ndarray" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_info</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;number of elements:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;number of dimensions:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;shape:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;data type:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;strides:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">strides</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;flags:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+    
+<span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 12
+number of dimensions: 2
+shape: (3, 4)
+data type: int64
+strides: (32, 8)
+flags:   C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>&lt;memory at 0x7f4312abc7e0&gt;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">abytes</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">abytes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 96
+number of dimensions: 1
+shape: (96,)
+data type: uint8
+strides: (1,)
+flags:   C_CONTIGUOUS : True
+  F_CONTIGUOUS : True
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">abytes</span><span class="p">[:</span><span class="mi">24</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[100   0   0   0   0   0   0   0 200   0   0   0   0   0   0   0  50   0
+   0   0   0   0   0   0]
+</pre></div>
+</div>
+<div class="section" id="example-take-the-transpose-of-a">
+<span id="example-take-the-transpose-of-a"></span><h3>Example: take the transpose of <code class="docutils literal"><span class="pre">a</span></code><a class="headerlink" href="#example-take-the-transpose-of-a" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 12
+number of dimensions: 2
+shape: (3, 4)
+data type: int64
+strides: (32, 8)
+flags:   C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 12
+number of dimensions: 2
+shape: (4, 3)
+data type: int64
+strides: (8, 32)
+flags:   C_CONTIGUOUS : False
+  F_CONTIGUOUS : True
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-skipping-rows-and-columns-with-slicing">
+<span id="example-skipping-rows-and-columns-with-slicing"></span><h3>Example: skipping rows and columns with <em>slicing</em><a class="headerlink" href="#example-skipping-rows-and-columns-with-slicing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 12
+number of dimensions: 2
+shape: (4, 3)
+data type: int64
+strides: (8, 32)
+flags:   C_CONTIGUOUS : False
+  F_CONTIGUOUS : True
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 6
+number of dimensions: 2
+shape: (2, 3)
+data type: int64
+strides: (16, 32)
+flags:   C_CONTIGUOUS : False
+  F_CONTIGUOUS : False
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 4
+number of dimensions: 2
+shape: (2, 2)
+data type: int64
+strides: (16, 64)
+flags:   C_CONTIGUOUS : False
+  F_CONTIGUOUS : False
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-a-copy">
+<span id="getting-a-copy"></span><h3>Getting a copy<a class="headerlink" href="#getting-a-copy" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[[100 200  50 400]
+ [ 50   0   0 100]
+ [350 100  50 200]]
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[[  5 200  50 400]
+ [ 50   0   0 100]
+ [350 100  50 200]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="advanced-operations-axis-wise-evaluation">
+<span id="advanced-operations-axis-wise-evaluation"></span><h2>Advanced operations: axis-wise evaluation<a class="headerlink" href="#advanced-operations-axis-wise-evaluation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">expr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../../data/expr.npy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">print_info</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>number of elements: 7687500
+number of dimensions: 2
+shape: (20500, 375)
+data type: uint32
+strides: (4, 82000)
+flags:   C_CONTIGUOUS : False
+  F_CONTIGUOUS : True
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</pre></div>
+</div>
+<p>This has the raw read count data. However, each sample gets a different number of reads, so we want to normalize by the <em>library size</em>, which is the total number of reads across a column.</p>
+<p>The <code class="docutils literal"><span class="pre">np.sum</span></code> function returns the sum of all the elements of an array. With the <code class="docutils literal"><span class="pre">axis</span></code> argument, you can take the sum <em>along the given axis</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lib_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lib_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[ 41539237  50824374  35747651  33532890  48162893  83478927  61652756
+  56043182  50066035  44291909  62103960  52177691  39935196  44712296
+  49499950  54994779  64874312  41901128  61124396  74947233  55805778
+  44751480  57419892  45460279  58590618  75900141  79022684  51253368
+  63148322  64114541  53696942  50946576  55709927  60184139  73887491
+  51905092  39721522  42746126  43019952  40435776  57789966  30526018
+  50488171  59600438  49802751 103219262  80445758  76730579  59996715
+  70611975  53788477  57967905  50450027  61725636  52939093  48355220
+  60814140  61419740  52865931  42718020  47981997  50989994  55265609
+  57268101  37174525  65469319  69459796  64633280  52550614  52800398
+  67603908  42568697  54328614  58801154  41408022  55721943  56051351
+  48906539  30074621  56514800  61685565  45155573  55190918  58239673
+  51484868  56456500  58897501  41200475  60510647  45186472  48863100
+  44723293  66857959  43679229  63454731  40459554  44210528  71649897
+  51052494  55893243  23880954  37930574  50358271  67084571  55954779
+  60533989  37534918  58268372  69034028  62187943  31471960  60211327
+  69060349  52800469  54351395  48929065  55783836  57805383  45280443
+  64365686  51738764  45503686  20805588   6231205  58912016  58382737
+  55586370  47844506  88199645  45202180  57012734  35536183  66413476
+  58255198  67400957  63388779  66920588  89665770  54467447  53674778
+  60489113  64271298  54482571  57945567  58481866  30468523  46520205
+  43720270  20860933  62291312  76469475  58273889  62758553  69907767
+  46323880  58981816  57005722  63065832  55354924  53218346  48332445
+  50847760  45896941  50855098  66765635  53976120  43076562  64591516
+  70321285  43164571  19972560  60273622  48626910  62192138  56940941
+  54212832  47915415  60829977  64420702  47877190  21861554  42351337
+  56078062  58080584  65786195  69711708  35936611  61273004  40872795
+  42664688  51610919  42895450  65840053  46914753  52775804  48278133
+  63447113  46209355  46190947  55448740  40136288  61288618  55819950
+  61874813  51645078  52880150  56670662  41643222  54351160  38218219
+  20136141  48512044  54430430  40095409  37135634  47338323  47628500
+  70593750  61983198  33989258  62762404  32312231  54883550  58804271
+  47618042  43385504  53262000  51775467  77796207  60667212  58663579
+  48561056  37776295  41013665  61718896  49617862  46246248  53495544
+  59868475  65570441  57271936  33651719  42949256  56326986  46188444
+  65338751  63280380  72026286  45558125  65005023  37707710  36690847
+  36791707  47339679  40636949  47695871  59847402  65956305  59465169
+  70009556  58111425  60158442  54800853  54455853  68528086  44581634
+  45475847  66490471  42291085  35965990  41479598  58860157  36363286
+  43083690  59348176  58854511  41230056  49617871  43539028  65823859
+  44602672  50578213  57054596  45886960  66240091  66165612  32463206
+  47864659  52971575  52220505  25097393  70434480  32039712  32819373
+  58584329  45039848  59657923  49474656  63730127  65560607  47372745
+  58633031  63905299  54165552  47486106  52398513  45153699  58159323
+  19581961  66938365  70099565  62639887  34726837  63115934  69049347
+  66656207  44194958  43770898  63897405  32572188  21661735  40549383
+  37659411  45886025  64801505  21061525  59949050  31486861  62661761
+  49585558  61242121  69353546  60024113  58447218  61229433  44275809
+  64901114  37277569  36078563  44834451  62844105  53060365  66203234
+  63269672  52694324  61885104  51421981  59063240  43349098  48320365
+  89431418  40367656  61502892  64771848  36282255  45373426  66499413
+  56130605  40281506  45002236  55357976  61842699  30509789  43349038
+  59621075  69058739  67386247  55079081  28732898  56053773  60685111
+  39380186  45394727  59700010  54182166]
+</pre></div>
+</div>
+<div class="section" id="exercise">
+<span id="exercise"></span><h3>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">¶</a></h3>
+<p>Generate a 10 x 3 array of random numbers. From each row, pick the number closest to 0.75. Make use of np.abs and np.argmax to find the column j which contains the closest element in each row.</p>
+</div>
+</div>
+<div class="section" id="advanced-operations-broadcasting">
+<span id="advanced-operations-broadcasting"></span><h2>Advanced operations: broadcasting<a class="headerlink" href="#advanced-operations-broadcasting" title="Permalink to this headline">¶</a></h2>
+<p>In order to normalize every column by its corresponding library size, we have to <em>align</em> the two arrays&#8217; axes: each dimension must be either the same size, or one of the arrays must have size 1. Use <code class="docutils literal"><span class="pre">np.newaxis</span></code> to match the dimensions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lib_size</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lib_size</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>(20500, 375)
+(375,)
+(1, 375)
+</pre></div>
+</div>
+<p>However, NumPy will automatically prepend singleton dimensions until the array shapes match or there is an error:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">expr</span> <span class="o">/</span> <span class="n">lib_size</span> <span class="o">==</span>
+       <span class="n">expr</span> <span class="o">/</span> <span class="n">lib_size</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:])</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">expr_lib</span> <span class="o">=</span> <span class="n">expr</span> <span class="o">/</span> <span class="n">lib_size</span>
+</pre></div>
+</div>
+<p>We also multiply by $10^6$ in order to keep the numbers on a readable scale (reads per million reads).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">expr_lib</span> <span class="o">*=</span> <span class="mf">1e6</span>
+</pre></div>
+</div>
+<p>Finally, longer genes are more likely to produce reads. So we normalize by the gene length (in kb) to produce a measure of expression called Reads Per Kilobase per Million reads (RPKM).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gene_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;../../data/gene-lens.npy&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">gene_len</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>(20500,)
+</pre></div>
+</div>
+<div class="section" id="exercise-broadcast-expr-lib-and-gene-len-together-to-produce-rpkm">
+<span id="exercise-broadcast-expr-lib-and-gene-len-together-to-produce-rpkm"></span><h3>Exercise: broadcast <code class="docutils literal"><span class="pre">expr_lib</span></code> and <code class="docutils literal"><span class="pre">gene_len</span></code> together to produce RPKM<a class="headerlink" href="#exercise-broadcast-expr-lib-and-gene-len-together-to-produce-rpkm" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rpkm</span> <span class="o">=</span> <span class="n">expr_lib</span>  <span class="c1"># FIX THIS</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+
+<span class="k">def</span> <span class="nf">plot_col_density</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Use gaussian smoothing to estimate the density</span>
+    <span class="n">density_per_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats</span><span class="o">.</span><span class="n">kde</span><span class="o">.</span><span class="n">gaussian_kde</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">xlim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">xlim</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">density</span> <span class="ow">in</span> <span class="n">density_per_col</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">density</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;log-counts&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;frequency&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xlim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_col_density</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">expr</span><span class="o">+</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">20</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/1_advanced_numpy_43_0.png" /></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_col_density</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rpkm</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">20</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">250</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/1_advanced_numpy_44_0.png" /></p>
+</div>
+<div class="section" id="exercise-3d-broadcasting">
+<span id="exercise-3d-broadcasting"></span><h3>Exercise: 3D broadcasting<a class="headerlink" href="#exercise-3d-broadcasting" title="Permalink to this headline">¶</a></h3>
+<p>Below, produce the array containing the sum of every element in <code class="docutils literal"><span class="pre">x</span></code> with every element in <code class="docutils literal"><span class="pre">y</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="c1"># FIX THIS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fancy-indexing">
+<span id="fancy-indexing"></span><h2>Fancy indexing<a class="headerlink" href="#fancy-indexing" title="Permalink to this headline">¶</a></h2>
+<p>You can index arrays with slicing, but also with boolean arrays (including broadcasting!), integer arrays, and individual indices along multiple dimensions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">99</span><span class="p">])</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">selector</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-output"><div class="highlight"><pre><span></span>[[2 2 0 0]
+ [1 1 0 2]
+ [1 0 1 1]]
+[[99 99  0  0]
+ [ 5  5  0 99]
+ [ 5  0  5  5]]
+</pre></div>
+</div>
+<div class="section" id="exercise-quantile-normalization">
+<span id="exercise-quantile-normalization"></span><h3>Exercise: quantile normalization<a class="headerlink" href="#exercise-quantile-normalization" title="Permalink to this headline">¶</a></h3>
+<p>Quantile Normalization(https://en.wikipedia.org/wiki/Quantile_normalization) is a method to align distributions. Implement it using NumPy axis-wise operations and fancy indexing.</p>
+<p><em>Hint: look for documentation for <code class="docutils literal"><span class="pre">scipy.mstats.rankdata</span></code>, <code class="docutils literal"><span class="pre">np.sort</span></code>, and <code class="docutils literal"><span class="pre">np.argsort</span></code>.</em></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">qnorm</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Quantile normalize an input matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : 2D array of float, shape (M, N)</span>
+<span class="sd">        The input data, with each column being a</span>
+<span class="sd">        distribution to normalize.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xn : 2D array of float, shape (M, N)</span>
+<span class="sd">        The normalized data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># replace this by normalizing code</span>
+    <span class="k">return</span> <span class="n">xn</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">logexpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">expr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">logrpkm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rpkm</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">logexprn</span> <span class="o">=</span> <span class="n">qnorm</span><span class="p">(</span><span class="n">logexpr</span><span class="p">)</span>
+<span class="n">logrpkmn</span> <span class="o">=</span> <span class="n">qnorm</span><span class="p">(</span><span class="n">logrpkm</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_col_density</span><span class="p">(</span><span class="n">logexprn</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">20</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/1_advanced_numpy_53_0.png" /></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_col_density</span><span class="p">(</span><span class="n">logrpkmn</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">20</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/1_advanced_numpy_54_0.png" /></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="0_images_are_arrays.html" class="btn btn-neutral float-right" title="Images are numpy arrays" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="0_preparation.html" class="btn btn-neutral" title="Preparation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, scikit-image devs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  <h4 class="sidebar-box-heading">Versions</h4>
+<div class="well sidebar-box">
+    <ul class="nav nav-list">
+        <script src="../_static/docversions.js"></script>
+        <script type="text/javascript">
+            insert_version_links();
+        </script>
+    </ul>
+</div>
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
