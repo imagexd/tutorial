@@ -234,7 +234,7 @@ flags:   C_CONTIGUOUS : True
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-output"><div class="highlight"><pre><span></span>&lt;memory at 0x7f4312abc7e0&gt;
+<div class="highlight-output"><div class="highlight"><pre><span></span>&lt;memory at 0x7fa0e836d7e0&gt;
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">abytes</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
@@ -560,12 +560,12 @@ flags:   C_CONTIGUOUS : False
 <span class="k">print</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">selector</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-output"><div class="highlight"><pre><span></span>[[2 2 0 0]
- [1 1 0 2]
- [1 0 1 1]]
-[[99 99  0  0]
- [ 5  5  0 99]
- [ 5  0  5  5]]
+<div class="highlight-output"><div class="highlight"><pre><span></span>[[0 2 1 2]
+ [2 0 1 2]
+ [2 0 1 0]]
+[[ 0 99  5 99]
+ [99  0  5 99]
+ [99  0  5  0]]
 </pre></div>
 </div>
 <div class="section" id="exercise-quantile-normalization">
