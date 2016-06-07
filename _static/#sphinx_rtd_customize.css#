@@ -1,0 +1,8 @@
+div.highlight-output {
+    background-color: #EAEAF2;
+}
+
+.l {
+    font-family: monospace;
+    background-color: red;
+}
